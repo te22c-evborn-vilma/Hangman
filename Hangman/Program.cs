@@ -15,10 +15,15 @@ Om hela gubben är utritad: #losing
 2. byta ut streck till bokstäver
 3. vinna
 */ 
+//string.Join funkar bara när man sätter ihop eller skriver ut i en string list eller string array
 // foreach (string letter in hiddenWord)
 // {
 //     Console.Write(letter);
 // }
+// int pos = word.IndexOf(guess[0]);
+// hiddenWord[pos] = guess;
+
+Random generator = new Random();
 
 static string[] MakeUnderscores(string word)
 {
@@ -31,8 +36,12 @@ static string[] MakeUnderscores(string word)
 
     return underscores;
 }
+string[] vocabularies = ["water", "fire", "air", "earth", "rhythm", "jazz", "waltz", "jukebox"];
 
-string word = "watermelon";
+int r = Random.Shared.Next(vocabularies.Length);
+
+string word = vocabularies[r];
+
 List<string> wrongGuesses = new();
 
 string[] hiddenWord = MakeUnderscores(word);
@@ -45,29 +54,33 @@ while(wrongGuesses.Count < lives && string.Join("", hiddenWord) != word)
     Console.WriteLine(string.Join(" ", hiddenWord));
     Console.WriteLine("\nGissa en bokstav!");
     string guess = Console.ReadLine();
+    guess = guess.ToLower();
 
-    if (word.Contains(guess[0]))
+    if(guess.Length != 1)
     {
-        Console.WriteLine("yay");
-
-        for (int i = 0; i < word.Length; i++)
-        {
-            if (word[i] == guess[0])
-            {
-                hiddenWord[i] = guess[0].ToString();
-            }
-        }
-        // int pos = word.IndexOf(guess[0]);
-        // hiddenWord[pos] = guess;
+        Console.WriteLine("Skriv EN bokstav");
     }
     else 
     {
-        Console.WriteLine("boo");
-        wrongGuesses.Add(guess);
+        if (word.Contains(guess[0]))
+        {
+            Console.WriteLine("yay");
+
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (word[i] == guess[0])
+                {
+                    hiddenWord[i] = guess[0].ToString();
+                }
+            }
+        }
+        else 
+        {
+            Console.WriteLine("boo");
+            wrongGuesses.Add(guess);
+        }
     }
 }
 
 Console.WriteLine("Spelet är över!");
 Console.ReadLine();
-
-//string.Join funkar bara när man sätter ihop eller skriver ut i en string list eller string array
